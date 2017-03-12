@@ -6,7 +6,7 @@
 
 body
 {
-	background-image:url('./Images/background.jpg');
+	background-image:url("../.././Project-Cinema7-img/background.jpg");
 	background-repeat: no-repeat;
 	background-size:cover;
 }
@@ -45,7 +45,7 @@ header
 
 #Banner
 {
-	background-image:url('./Images/header.jpg');
+	background-image:url('../.././Project-Cinema7-img/header.jpg');
 	width: 1000px;
 	height: 140px;
 

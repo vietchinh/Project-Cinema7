@@ -1,7 +1,4 @@
-<!--
-	Opdracht PM08 STAP 1: registreren
-	Omschrijving: Geef met commentaar aan wat de stukjes PHP code doen in dit bestand
--->
+
 	<h1>Registreren</h1>
 	<form name="RegistratieFormulier" action="" method="post">
 		<label for="FirstName">Voornaam:</label>

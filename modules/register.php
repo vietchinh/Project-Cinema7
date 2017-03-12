@@ -7,11 +7,7 @@ $FnameErr = $LnameErr = $ZipErr = $CityErr = $TelErr = $MailErr = $UserErr = $Pa
 
 if(isset($_POST['Registreren']))
 {	
-	/*
-	Opdracht PM08 STAP 2: registreren
-	Omschrijving: Lees alle gegevens uit het formulier uit middels de POST methode
-	*/
-	
+
 	$FirstName 		= $_POST["FirstName"];
 	$LastName 		= $_POST["LastName"];
 	$Adres 			= $_POST["Adres"];
@@ -24,12 +20,6 @@ if(isset($_POST['Registreren']))
 	$RetypePassword = $_POST["RetypePassword"];
 	
 	
-
-	//BEGIN CONTROLES
-	/*
-	Opdracht PM08 STAP 3: registreren
-	Omschrijving: Zorg er voor dat de gegevens worden gevalideerd op de eisen uit de opdracht. Gebruik de hulpvariabele $CheckOnErrors om later te kunnen controleren of er een fout is gevonden. Deze variabele zet je dus op true wanneer je een validatie fout tegenkomt. Voor het valideren kun je gebruik maken van de validatie functies in het bestand functies.php
-	*/
 	$checkOnerrors = array (
 	//controleer het voornaam veld
 	"FnameErrchar" 	 => is_Char_Only($FirstName),
@@ -61,13 +51,8 @@ if(isset($_POST['Registreren']))
 	   "RePassErr"   => is_Paswoord_Same($Password, $RetypePassword)
 	
 	);
-	//EINDE CONTROLES
-	/*
-	Opdracht PM08 STAP 4: registreren
-	Omschrijving: Controleer hier of er een fout is gevonden middels de CheckOnErrors variabele. Zo ja, dan ziet de gebruiker opnieuw het formulier; zo nee, dan gaan we de gegevens in de database toevoegen.
-	*/
-	if(count(array_keys($checkOnerrors, null)) != 0) //aanvullen
-	{
+	
+	if(count(array_keys($checkOnerrors, null)) != 0) {
 		$checkOnnull = array_flip(array_keys($checkOnerrors, null));
 		
 		unset
@@ -89,7 +74,7 @@ if(isset($_POST['Registreren']))
 			
 			"MailErr" 	=> "U e-mail address is niet valide",
 
-			"UserErr" 	=> "Uw gebruikersnaam is al in gebruik.",
+			"UserErr" 	=> ($Username == "Admin" || $Username == "admin") ? "U bent niet de eigenaar van deze website" : "Uw gebruikersnaam is al in gebruik.",
 			
 			"PassErr"   => "Uw paswoord moet minimaal 6 karakter lang zijn",
 			
@@ -132,24 +117,24 @@ if(isset($_POST['Registreren']))
 			${$key} = $value; // source  http://stackoverflow.com/questions/9257505/dynamic-variable-names-in-php
 		}
 		
-		require_once('./Forms/RegistrerenForm.php');
+		require_once("./Forms/registerForm.php");
 	}
 	else
 	{
 		//formulier is succesvol gevalideerd
 
 		//maak unieke salt
-		$Salt = hash('sha512', uniqid(mt_rand(1, mt_getrandmax()), true));
+		$Salt = hash("sha512", uniqid(mt_rand(1, mt_getrandmax()), true));
 
 		//hash het paswoord met de Salt
-		$Password = hash('sha512', $Password . $Salt);
+		$Password = hash("sha512", $Password . $Salt);
 
 		/*
 		Opdracht PM08 STAP 5: registreren
 		Omschrijving: Maak een prepared statement waarmee de gegevens van de gebruiker in de database worden toegevoegd. LET OP: Level moet 1 zijn! 
 		*/
 		
-		$insertCheck = insertDatacustomer($pdo, $FirstName, $LastName, $Adres, $ZipCode , $City, $TelNr, $Email, $Username, $Password, $Salt);
+		$insertCheck = insertCustomerdata($pdo, $FirstName, $LastName, $Adres, $ZipCode , $City, $TelNr, $Email, $Username, $Password, $Salt);
 
 		/*
 		Opdracht PM08 STAP 6: registreren
@@ -158,7 +143,7 @@ if(isset($_POST['Registreren']))
 		
 		if ($insertCheck == true) {
 			echo "U bent succesvol geregistreerd! Van harte welkom! U wordt in 5 seconden herleid naar de home pagina";
-			RedirectNaarPagina(5, 1);
+			RedirectToPage(5, 1);
 		}
 		else {
 			echo "Er is iets misgegaan met het registeren. Neem contact op met de pagina beheerder.";
@@ -169,6 +154,6 @@ if(isset($_POST['Registreren']))
 }
 else
 {
-	require_once('./Forms/RegistrerenForm.php');
+	require_once("./Forms/registerForm.php");
 }
 ?>

@@ -1,8 +1,4 @@
-<!-- 
-	Opdracht 4.03 : Mijn Profiel 
-	Maak hier het formulier voor de pagina Mijn Profiel. Let op: dit lijkt sterk op het formulier Registreren
--->
-	
+
 	<h1>Gegevens Wijzigen</h1>
 	<form name="WijzigenFormulier" action="" method="post">
 		<label for="FirstName">Voornaam:</label>

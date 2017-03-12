@@ -4,7 +4,7 @@
 	Omschrijving: Voer een query uit middels een prepared statement
 */
 
-	$fi = fetchFilmsstatus($pdo, "InBios");
+	$fi = fetchDatabase($pdo, "movie", "InBios");
 
 
 /*

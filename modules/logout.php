@@ -1,11 +1,11 @@
 <?php
 // Unset session var 
-$_SESSION = array();
+unset($_SESSION);
  
-// ophalen session parameters 
+// Get session parameters
 $params = session_get_cookie_params();
  
-// verwijderen van sessie cookie 
+// Delete session cookie
 setcookie(session_name(),
         '', time() - 42000, 
         $params["path"], 
@@ -16,8 +16,8 @@ setcookie(session_name(),
 // Destroy session 
 session_destroy();
 
-// Header refresh naar homepage
-RedirectNaarPagina();
+// Refresh to Homepage
+RedirectToPage();
 ?>
 
 
