@@ -39,7 +39,8 @@
 					require_once("./modules/OverOns.php");
 					break;
 				case 5:
-					if ($isRegister) {
+				// registerLf = Register loginForm; It's the register button on the login page. registerRf = Register registerForm It's the register button on the register page.
+					if (isset($_POST["registerLf"]) || isset($_POST["registerRf"])) { 
 						$module = "./modules/register.php";
 					}
 					elseif (!$isLogin) {

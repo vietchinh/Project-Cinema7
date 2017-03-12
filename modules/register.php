@@ -5,8 +5,7 @@ $FirstName = $LastName = $Adres = $ZipCode = $City = $TelNr = $Email = $Username
 //init error fields
 $FnameErr = $LnameErr = $ZipErr = $CityErr = $TelErr = $MailErr = $UserErr = $PassErr = $RePassErr = NULL;
 
-if(isset($_POST["register"]))
-{	
+if(isset($_POST["registerRf"])) {	
 
 	$FirstName 		= $_POST["FirstName"];
 	$LastName 		= $_POST["LastName"];
@@ -20,7 +19,7 @@ if(isset($_POST["register"]))
 	$RetypePassword = $_POST["RetypePassword"];
 	
 	
-	/*$checkOnerrors = array (
+	$checkOnerrors = array (
 	//controleer het voornaam veld
 	"FnameErrchar" 	 => is_Char_Only($FirstName),
 	"FnameErrlength" => is_minlength($FirstName, 2),
@@ -120,7 +119,7 @@ if(isset($_POST["register"]))
 		require_once("./forms/registerForm.php");
 	}
 	else
-	{*/
+	{
 		//formulier is succesvol gevalideerd
 
 		//hash het paswoord met de Salt
@@ -138,16 +137,14 @@ if(isset($_POST["register"]))
 		Omschrijving: Tot slot geef je de gebruiker de melding dat zijn gegevens zijn toegevoegd.
 		*/
 		
-		/*if ($insertCheck == true) {
+		if ($insertCheck == true) {
 			echo "U bent succesvol geregistreerd! Van harte welkom! U wordt in 5 seconden herleid naar de home pagina";
 			RedirectToPage(5, 1);
 		}
 		else {
 			echo "Er is iets misgegaan met het registeren. Neem contact op met de pagina beheerder.";
-		}*/
-		require_once("./forms/registerForm.php");
-		
-	//}
+		}
+	}
 }
 else
 {

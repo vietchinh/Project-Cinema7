@@ -11,7 +11,6 @@ if(isset($_POST["login"])) {
 	$username = $_POST["username"];
 	$password = $_POST["password"];
 
-	print_r($_POST);
 	/*
 	Opdracht PM07 STAP 3: Inlogsysteem
 	Omschrijving: Roep de functie login aan en geef de 3 correcte paramteres mee aan de functie. Middels een if statement kun je vervolgens controleren of de gebruiker is ingelogd en de juiste boodschap weergeven
@@ -26,7 +25,6 @@ if(isset($_POST["login"])) {
 	}
 	else {
 		$login = login($pdo, $username, $password);
-		print_r($login);
 		if ($login == "ePassword") {
 			require_once("./forms/loginForm.php");
 			echo "<h1> U heeft uw password verkeerd ingevoerd, controleer uw password. </h1>";

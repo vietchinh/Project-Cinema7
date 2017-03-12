@@ -234,9 +234,9 @@ function ConnectDB() {
 		$pbe->bindValue(":password", $password, PDO::PARAM_STR);
 		$pbe->execute();
 		
-		//$check = fetchDatabase($pdo, "login", $username, "Inlognaam");
+		$check = fetchDatabase($pdo, "login", $username, "Inlognaam");
 		
-		//return ($check) ? true : false;
+		return ($check) ? true : false;
 		
 	} 
 // Functie die het gebruikers gegevens wijzigd.

@@ -2,8 +2,8 @@
 session_start();
 
 // Section 1 - Insert functions and databaseFunctions modules
-require("./functions/databaseFunctions.php");
-require("./functions/functions.php");
+require_once("./functions/functions.php");
+require_once("./functions/databaseFunctions.php");
 
 // Section 2 - Connect DB
 $pdo = connectDB();

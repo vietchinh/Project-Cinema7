@@ -8,16 +8,18 @@ function RedirectToPage($Seconds = NULL,$PaginaNr = NULL)
 {
 	if(!empty($Seconds))
 		$Refresh = "Refresh: ".$Seconds.";URL=";
-	else
+	else {
 		$Refresh = "location:";
+	}
 
 	if(!isset($PaginaNr))
 	{
 		header($Refresh . "index.php");
 		return "<br />U wordt binnen ".$Seconds." seconden doorgestuurd naar de hoofdpagina.";
 	}
-	else
+	else {
 		header($Refresh . "index.php?PaginaNr=".$PaginaNr);
+	}
 }
 function login($pdo, $username, $password) {
 	

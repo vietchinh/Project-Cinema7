@@ -2,12 +2,6 @@
 
 // Section 1 - Check whether register post is set.
 
-if (isset($_POST["register"]) || isset($_POST["Registreren"])){
-	$isRegister = true;
-}
-else {
-	$isRegister = false;
-}
 // Section 2 - Login check
 $isLogin = LoginCheck($pdo);
 
