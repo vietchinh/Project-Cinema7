@@ -32,5 +32,5 @@
 		<label for="RetypePassword">Herhaal Wachtwoord:</label>
 		<input type="password" id="RetypePassword" name="RetypePassword" required /><?php echo $RePassErr; ?> <!-- Als de opnieuw getypde paswoord niet voldoet aan de voorwaardes, dan geeft die naast de opnieuw getypde paswoord een error. -->
 		<br />		
-		<input type="submit" name="Registreren" value="Registreer!" />
+		<input type="submit" name="register" value="Registreer!" />
 	</form>

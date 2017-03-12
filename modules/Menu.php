@@ -2,7 +2,7 @@
 
 // Section 1 - Check whether register post is set.
 
-if (isset($_POST["Register"]) || isset($_POST["Registreren"])){
+if (isset($_POST["register"]) || isset($_POST["Registreren"])){
 	$isRegister = true;
 }
 else {

@@ -2,7 +2,7 @@
 <form method="post" id="Inloggen" >
 	<input type="text" name="username" placeholder="Gebruikersnaam">
 	<input type="password" name="password" placeholder="Password" autocomplete="new-password">
-	<input type="submit" name="Inloggen" value="Inloggen">
+	<input type="submit" name="login" value="Inloggen">
 	<p>Heeft u nog geen Account? Registreer dan 
-	<input type="submit" name="Register" value="hier"> </p>
+	<input type="submit" name="register" value="hier"> </p>
 </form>

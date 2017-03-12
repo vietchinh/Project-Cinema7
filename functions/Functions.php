@@ -19,23 +19,19 @@ function RedirectToPage($Seconds = NULL,$PaginaNr = NULL)
 	else
 		header($Refresh . "index.php?PaginaNr=".$PaginaNr);
 }
-function login($username, $password, $pdo) {
+function login($pdo, $username, $password) {
 	
 	$userData = fetchDatabase($pdo, "login", $username, "Inlognaam");
-	
+
 	/*
 	Opdracht PM07 STAP 5: Inlogsysteem
 	Omschrijving: Voorzie de komende regels van commentaar, zoals in de opdracht gevraagd wordt.
 	*/
-	
-	if ($userData) 
-	{
+
+	if ($userData) {
 		// Variabelen inlezen uit query
 
-		$password = hash("sha512", $password . $userData->Salt);
-		
-		if ($userData->Paswoord == $password)
-		{
+		if (password_verify($password, $userData->Paswoord)) {
 
 			$userBrowser = $_SERVER["HTTP_USER_AGENT"];
 
@@ -46,13 +42,12 @@ function login($username, $password, $pdo) {
 			$_SESSION["userId"] = $userData->KlantID;
 			$_SESSION["username"] = $userData->Inlognaam;
 			$_SESSION["level"] = $userData->Level;
-			$_SESSION["loginString"] = hash("sha512", $password . $userBrowser);
+			$_SESSION["loginString"] = hash("sha512", $userData->Paswoord . $userBrowser);
 			
 			// Login successful.
-			return "Success";
+			return "success";
 		 } 
-		 else 
-		 {
+		 else {
 			// password incorrect
 			return "ePassword"; // Error Password
 		 }
@@ -66,35 +61,39 @@ function login($username, $password, $pdo) {
 /** De functie LoginCheck
   * controleert of de gebruiker is ingelogd
   */
-function LoginCheck($pdo) 
-{
+function LoginCheck($pdo) {
     // Controleren of Sessie variabelen bestaan
-    if (isset($_SESSION["userId"], $_SESSION["username"],$_SESSION["loginString"])) 
-	{
-        $clientId = $_SESSION["userId"];
+	if (isset($_SESSION["userId"], $_SESSION["username"], $_SESSION["loginString"])) {
+        $clientId 	 = $_SESSION["userId"];
         $loginString = $_SESSION["loginString"];
-        $username = $_SESSION["username"];
- 
+        $username 	 = $_SESSION["username"];
+		
         // Get the user-agent string of the user.
         $userBrowser = $_SERVER["HTTP_USER_AGENT"];
 		
 		$userData = fetchDatabase($pdo, "login", $clientId, "KlantID", PDO::PARAM_INT);
-		
+
 		// controleren of de klant voorkomt in de DB
 		if ($userData) {
 
 			//check maken
 		    $loginCheck = hash("sha512", $userData->Paswoord . $userBrowser);
- 
-				//controleren of check overeenkomt met sessie
-                if ($loginCheck == $loginString)
-					return true;
-                else 
-                   return false;
-         } else 
-              return false;         
-     } else 
-          return false;
+			
+			//controleren of check overeenkomt met sessie
+			if ($loginCheck == $loginString) {
+				return true;					
+			}
+			else {
+			   return false;					
+			}
+        }
+		else {
+			return false; 			
+		}        
+    } 
+	else {
+		return false;
+	}
 }
 
 /* Functies voor validatie van Form Fields */

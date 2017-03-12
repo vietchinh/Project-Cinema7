@@ -55,7 +55,6 @@ function ConnectDB() {
 				cinema7.klanten.KlantID,
 				cinema7.klanten.Inlognaam,
 				cinema7.klanten.Paswoord,
-				cinema7.klanten.Salt,
 				cinema7.klanten.Level";
 		}
 	// Section 2.2 - from
@@ -109,7 +108,7 @@ function ConnectDB() {
 	// Section 2.4 - Prepare Bind Execute Return
 		// Section 2.4.1 - Prepare
 		$pbe = $pdo->prepare($sql); //pbe = Prepare Bind Execute
-		
+
 		// Section 2.4.2 - Dynamic Bind Value
 		if ($select == "movie") {
 			$pbe->bindValue( ":status", $bindValue, $param);
@@ -120,7 +119,7 @@ function ConnectDB() {
 		elseif ($select == "login") {
 			$pbe->bindValue(":search", $bindValue, $param);
 		}
-		
+
 		// Section 2.4.3 - Execute
 		$pbe->execute();
 		
@@ -185,7 +184,7 @@ function ConnectDB() {
 		return $pbe->fetchAll(PDO::FETCH_ASSOC);
 	}
 // Functie die alle data toevoegt aan de database
-	function insertCustomerdata($pdo, $fName, $lName, $adres = null, $zipcode, $city, $telNr, $email, $username, $password, $salt) {
+	function insertCustomerdata($pdo, $fName, $lName, $adres = null, $zipcode, $city, $telNr, $email, $username, $password) {
 		
 		$fName 	  = filter_var(trim($fName), 	FILTER_SANITIZE_STRING);
 		$lName 	  = filter_var(trim($lName), 	FILTER_SANITIZE_STRING);
@@ -209,7 +208,6 @@ function ConnectDB() {
 				Email,
 				Inlognaam,
 				Paswoord,
-				Salt,
 				Level )
 			VALUES
 			(	:fName, 
@@ -221,7 +219,6 @@ function ConnectDB() {
 				:email, 
 				:username,
 				:password,
-				:salt,
 				1
 				)";
 		
@@ -235,12 +232,11 @@ function ConnectDB() {
 		$pbe->bindValue(":email", 	 $email,    PDO::PARAM_STR);
 		$pbe->bindValue(":username", $username, PDO::PARAM_STR);
 		$pbe->bindValue(":password", $password, PDO::PARAM_STR);
-		$pbe->bindValue(":salt", 	 $salt, 	PDO::PARAM_STR);
 		$pbe->execute();
 		
-		$check = fetchDatabase($pdo, "login", $username, "Inlognaam");
+		//$check = fetchDatabase($pdo, "login", $username, "Inlognaam");
 		
-		return ($check) ? true : false;
+		//return ($check) ? true : false;
 		
 	} 
 // Functie die het gebruikers gegevens wijzigd.

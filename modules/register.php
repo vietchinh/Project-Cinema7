@@ -5,7 +5,7 @@ $FirstName = $LastName = $Adres = $ZipCode = $City = $TelNr = $Email = $Username
 //init error fields
 $FnameErr = $LnameErr = $ZipErr = $CityErr = $TelErr = $MailErr = $UserErr = $PassErr = $RePassErr = NULL;
 
-if(isset($_POST['Registreren']))
+if(isset($_POST["register"]))
 {	
 
 	$FirstName 		= $_POST["FirstName"];
@@ -20,7 +20,7 @@ if(isset($_POST['Registreren']))
 	$RetypePassword = $_POST["RetypePassword"];
 	
 	
-	$checkOnerrors = array (
+	/*$checkOnerrors = array (
 	//controleer het voornaam veld
 	"FnameErrchar" 	 => is_Char_Only($FirstName),
 	"FnameErrlength" => is_minlength($FirstName, 2),
@@ -117,43 +117,40 @@ if(isset($_POST['Registreren']))
 			${$key} = $value; // source  http://stackoverflow.com/questions/9257505/dynamic-variable-names-in-php
 		}
 		
-		require_once("./Forms/registerForm.php");
+		require_once("./forms/registerForm.php");
 	}
 	else
-	{
+	{*/
 		//formulier is succesvol gevalideerd
 
-		//maak unieke salt
-		$Salt = hash("sha512", uniqid(mt_rand(1, mt_getrandmax()), true));
-
 		//hash het paswoord met de Salt
-		$Password = hash("sha512", $Password . $Salt);
+		$Password = password_hash($Password, PASSWORD_DEFAULT);
 
 		/*
 		Opdracht PM08 STAP 5: registreren
 		Omschrijving: Maak een prepared statement waarmee de gegevens van de gebruiker in de database worden toegevoegd. LET OP: Level moet 1 zijn! 
 		*/
 		
-		$insertCheck = insertCustomerdata($pdo, $FirstName, $LastName, $Adres, $ZipCode , $City, $TelNr, $Email, $Username, $Password, $Salt);
-
+		$insertCheck = insertCustomerdata($pdo, $FirstName, $LastName, $Adres, $ZipCode , $City, $TelNr, $Email, $Username, $Password);
+		print_r($insertCheck);
 		/*
 		Opdracht PM08 STAP 6: registreren
 		Omschrijving: Tot slot geef je de gebruiker de melding dat zijn gegevens zijn toegevoegd.
 		*/
 		
-		if ($insertCheck == true) {
+		/*if ($insertCheck == true) {
 			echo "U bent succesvol geregistreerd! Van harte welkom! U wordt in 5 seconden herleid naar de home pagina";
 			RedirectToPage(5, 1);
 		}
 		else {
 			echo "Er is iets misgegaan met het registeren. Neem contact op met de pagina beheerder.";
-		}
-
+		}*/
+		require_once("./forms/registerForm.php");
 		
-	}
+	//}
 }
 else
 {
-	require_once("./Forms/registerForm.php");
+	require_once("./forms/registerForm.php");
 }
 ?>
