@@ -172,44 +172,6 @@ function ConnectDB() {
 			return $pbe->fetchAll(PDO::FETCH_OBJ);
 		}
 	}
-
-// Functie om dynamisch de gebruikers data opzoekt.
-	/*function fetchCustomerdata($pdo, $searchString, $bindValue, $param, $fetchAll = false) {
-		
-		$searchString = filter_var(trim($searchString), FILTER_SANITIZE_STRING);
-		
-		if ($fetchAll == true) {
-			$sql = "select 
-						cinema7.klanten.Voornaam,
-						cinema7.klanten.Achternaam,
-						cinema7.klanten.Adres,
-						cinema7.klanten.Postcode,
-						cinema7.klanten.Plaats,
-						cinema7.klanten.TelefoonNr,
-						cinema7.klanten.Email";
-		}
-		else {
-			$sql = "
-			select
-				cinema7.klanten.KlantID,
-				cinema7.klanten.Inlognaam,
-				cinema7.klanten.Paswoord,
-				cinema7.klanten.Salt,
-				cinema7.klanten.Level";
-		}
-		
-		$sql .= "
-		from
-			cinema7.klanten
-		where
-			cinema7.klanten." . $searchString . " = :search LIMIT 1";
-		
-		$pbe = $pdo->prepare($sql);
-		
-		$pbe->execute();
-		return $pbe;
-	}*/
-
 // Functie die de menu data oproept, door middel van level.
 	function fetchMenudata($pdo, $level) {
 		$sql = "
@@ -369,30 +331,4 @@ function ConnectDB() {
 		
 		return $check;
 	}
-
-function test($pdo, $fields){
-	
-	// Sources: http://stackoverflow.com/questions/2350052/how-can-i-get-enum-possible-values-in-a-mysql-database
-	// http://stackoverflow.com/questions/614238/how-can-i-rename-a-single-column-in-a-table-at-select
-		$sql = "
-			SELECT 
-				SUBSTRING(COLUMN_TYPE,7)
-				AS
-				enum
-			FROM 
-				INFORMATION_SCHEMA.COLUMNS 
-			WHERE 
-				TABLE_SCHEMA = 'cinema7' 
-				AND 
-				TABLE_NAME = 'films' 
-				AND 
-				COLUMN_NAME = :columnName 
-		";
-		
-		$pbe = $pdo->prepare($sql);
-		$pbe->bindValue("columnName", $fields, PDO::PARAM_STR);
-		$pbe->execute();
-		return $pbe->fetch(PDO::FETCH_OBJ);
-}
-
 ?>
