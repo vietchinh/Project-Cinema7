@@ -28,7 +28,11 @@ function ConnectDB() {
 
 // Section 2 - Database Fetch
 	function fetchDatabase($pdo, $select, $bindValue = null, $param = PDO::PARAM_STR){
-		
+	
+	// Sources for getting enum tables:
+	// http://stackoverflow.com/questions/2350052/how-can-i-get-enum-possible-values-in-a-mysql-database
+	// http://stackoverflow.com/questions/614238/how-can-i-rename-a-single-column-in-a-table-at-select
+	
 	// section 2.1 - Select	
 		$sql = "
 			select";
