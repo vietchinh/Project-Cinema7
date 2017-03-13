@@ -73,7 +73,7 @@ if(isset($_POST["registerRf"])) {
 			
 			"MailErr" 	=> "U e-mail address is niet valide",
 
-			"UserErr" 	=> ($Username == "Admin" || $Username == "admin") ? "U bent niet de eigenaar van deze website" : "Uw gebruikersnaam is al in gebruik.",
+			"UserErr" 	=> ($Username == "Admin" || $Username == "admin" || $Username == "Root" || $Username == "root") ? "U bent niet de eigenaar van deze website" : "Uw gebruikersnaam is al in gebruik.",
 			
 			"PassErr"   => "Uw paswoord moet minimaal 6 karakter lang zijn",
 			
@@ -131,7 +131,7 @@ if(isset($_POST["registerRf"])) {
 		*/
 		
 		$insertCheck = insertCustomerdata($pdo, $FirstName, $LastName, $Adres, $ZipCode , $City, $TelNr, $Email, $Username, $Password);
-		print_r($insertCheck);
+		
 		/*
 		Opdracht PM08 STAP 6: registreren
 		Omschrijving: Tot slot geef je de gebruiker de melding dat zijn gegevens zijn toegevoegd.

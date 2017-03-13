@@ -8,6 +8,6 @@ require_once("./functions/databaseFunctions.php");
 // Section 2 - Connect DB
 $pdo = connectDB();
 
-// Section 6 - Insert Homepage
+// Section 3 - Insert Homepage
 require("homepage.php");
 ?>

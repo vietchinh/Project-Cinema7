@@ -12,10 +12,9 @@ if(LoginCheck($pdo))
 			Omschrijving: maak een prepared statement waarmee je de gegevens van de gebruiker ophaald. Zijn/Haar KlantId dien je te verkrijgen uit de sessie zodat je de juiste gegevens er bij kan terugvinden
 		*/
 
-			$userId = $_SESSION["user_id"];
+			$username = $_SESSION["username"];
 
-			$pbe = fetchCustomerdata($pdo, "KlantID", $userId, PDO::PARAM_INT, true);
-			$customerData = $pbe->fetch(PDO::FETCH_ASSOC);
+			$customerData = fetchDatabase($pdo, "customerData", $username);
 
 		/*  
 			Opdracht PM10 STAP 2 : Mijn Profiel 
@@ -76,9 +75,6 @@ if(LoginCheck($pdo))
 				
 				//controleer het email veld
 					"MailErr" 	 => is_email($Email),
-
-				//controleer het username veld
-					"UserErr" 	 => is_Username_Unique($Username, $pdo),
 				
 				);
 				//EINDE CONTROLES
@@ -164,7 +160,7 @@ if(LoginCheck($pdo))
 					Omschrijving: maak een prepared statement waarmee je de gegevens van de gebruiker middels een UPDATE in de database aanpast. 
 					*/
 					
-					updateCustomerdata($pdo, $userId, $FirstName, $LastName, $Adres, $ZipCode, $City, $TelNr, $Email);
+					updateCustomerdata($pdo, $username, $FirstName, $LastName, $Adres, $ZipCode, $City, $TelNr, $Email);
 					
 					/*  
 					Opdracht PM10 STAP 6 : Mijn Profiel 
@@ -173,18 +169,18 @@ if(LoginCheck($pdo))
 					
 					echo "Uw gegevens zijn succesvol gewijzigd";
 					
-					require_once("./Forms/MijnProfielForm.php");
+					require_once("./forms/myProfileform.php");
 
 				}
 			}
 			else {
 				echo "Er is niks gewijzigd.";
-				require_once("./Forms/MijnProfielForm.php");
+				require_once("./forms/myProfileform.php");
 			}
 		}
 		else
 		{	
-			require_once("./Forms/MijnProfielForm.php");
+			require_once("./forms/myProfileform.php");
 		}
 		/* ===============CODE================== */
 	}

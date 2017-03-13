@@ -23,7 +23,7 @@ function RedirectToPage($Seconds = NULL,$PaginaNr = NULL)
 }
 function login($pdo, $username, $password) {
 	
-	$userData = fetchDatabase($pdo, "login", $username, "Inlognaam");
+	$userData = fetchDatabase($pdo, "login", $username);
 
 	/*
 	Opdracht PM07 STAP 5: Inlogsysteem
@@ -73,7 +73,7 @@ function LoginCheck($pdo) {
         // Get the user-agent string of the user.
         $userBrowser = $_SERVER["HTTP_USER_AGENT"];
 		
-		$userData = fetchDatabase($pdo, "login", $clientId, "KlantID", PDO::PARAM_INT);
+		$userData = fetchDatabase($pdo, "login", $username);
 
 		// controleren of de klant voorkomt in de DB
 		if ($userData) {
@@ -164,7 +164,7 @@ function LoginCheck($pdo) {
 	function returnTablestatus($fs, $form = false){ // fs = fetchStatus
 		$table = null;
 		foreach ($fs as $object){
-			if ($form == true) {
+			if ($form) {
 				$form = "
 					<form method='post' action='./Modules/Data.Tijden.php'>
 						<input type='hidden' name='filmID' value='$object->FilmID'>
@@ -179,7 +179,7 @@ function LoginCheck($pdo) {
 							<img src='../Project-Cinema7-img/default.jpg' height='140px'>
 							<div id='beschrijving'>
 								<h4> Beschrijving: </h4>
-								<p> $object->Beschrijving
+								<p> $object->Beschrijving </p>
 							</div>
 							<div id='infoBar' class='displayIflex'>
 								<h4> Duur: </h4>
@@ -187,7 +187,7 @@ function LoginCheck($pdo) {
 								<h4> Genre: </h4>
 								<p> $object->Genre </p>
 								<h4> Leeftijd: </h4>
-								<p> $object->Leeftijd </p></div>								
+								<p> $object->Leeftijd </p></div>						
 							</div>
 						</div>
 						$form
