@@ -285,52 +285,85 @@ function ConnectDB() {
 		$pbe->execute();
 		
 	}
-	function addNewmovie($pdo, $title, $description, $duration, $genre, $age, $picture, $price, $type, $state) {
+	function add_Remove_or_Edit_movies($pdo, $addRemoveorEdit, $movieId, $title = null, $description = null, $duration = null, $genre = null, $age = null, $picture = null, $price = null, $type = null, $state = null) {
 
+		$movieId  	 = filter_var(trim($movieId),  	  FILTER_SANITIZE_NUMBER_INT);
 		$title 	  	 = filter_var(trim($title),       FILTER_SANITIZE_STRING);
 		$description = filter_var(trim($description), FILTER_SANITIZE_STRING);
 		$genre  	 = filter_var(trim($genre), 	  FILTER_SANITIZE_STRING);
 		$picture 	 = filter_var(trim($picture), 	  FILTER_SANITIZE_STRING);
 		$type 		 = filter_var(trim($type), 		  FILTER_SANITIZE_STRING);
 		$state 		 = filter_var(trim($state), 	  FILTER_SANITIZE_STRING);
-	
-		var_dump($genre);
-		var_dump($age);
 		
-		$sql = "
-			INSERT INTO
-			cinema7.films(
-				Titel, 
-				Beschrijving,
-				Duur,
-				Genre,
-				Leeftijd,
-				Plaatje,
-				Prijs,
-				Type,
-				Status )
-			VALUES
-			(	:title, 
-				:description, 
-				:duration, 
-				:genre, 
-				:age,
-				:picture,
-				:price, 
-				:type, 
-				:state
-				)";
+		if ($addRemoveorEdit == "add") {
+			$sql = "
+				INSERT INTO
+				cinema7.films(
+					Titel, 
+					Beschrijving,
+					Duur,
+					Genre,
+					Leeftijd,
+					Plaatje,
+					Prijs,
+					Type,
+					Status )
+				VALUES
+				(	:title, 
+					:description, 
+					:duration, 
+					:genre, 
+					:age,
+					:picture,
+					:price, 
+					:type, 
+					:state
+					)";
+		}
+		elseif ($addRemoveorEdit == "remove") {
+			$sql = "
+				DELETE FROM
+				cinema7.films
+				WHERE
+				cinema7.films.FilmID = :movieId";
+		}
+		else {
+			$sql = "
+				UPDATE
+					cinema7.films
+				SET
+					cinema7.films.Titel		   = :title,
+					cinema7.films.Beschrijving = :description,
+					cinema7.films.Duur	   	   = :duration,
+					cinema7.films.Genre   	   = :genre,
+					cinema7.films.Leeftijd	   = :age,
+					cinema7.films.Plaatje 	   = :picture,
+					cinema7.films.Prijs	   	   = :price,
+					cinema7.films.Type 		   = :type,
+					cinema7.films.Status 	   = :state
+				WHERE
+					cinema7.films.FilmID = :movieId";
+		}
 		
+
 		$pbe = $pdo->prepare($sql);
-		$pbe->bindValue(":title", 	 	$title, 	  PDO::PARAM_STR);
-		$pbe->bindValue(":description", $description, PDO::PARAM_STR);
-		$pbe->bindValue(":duration", 	$duration, 	  PDO::PARAM_INT);
-		$pbe->bindValue(":genre",  		$genre,  	  PDO::PARAM_STR);
-		$pbe->bindValue(":age", 	 	$age,   	  PDO::PARAM_INT);
-		$pbe->bindValue(":picture",    	$picture,     PDO::PARAM_STR);
-		$pbe->bindValue(":price", 		$price,    	  PDO::PARAM_STR);
-		$pbe->bindValue(":type", 		$type, 		  PDO::PARAM_STR);
-		$pbe->bindValue(":state", 		$state, 	  PDO::PARAM_STR);
+		
+		if ($addRemoveorEdit != "remove"){
+			$pbe->bindValue(":title", 	 	$title, 	  PDO::PARAM_STR);
+			$pbe->bindValue(":description", $description, PDO::PARAM_STR);
+			$pbe->bindValue(":duration", 	$duration, 	  PDO::PARAM_INT);
+			$pbe->bindValue(":genre",  		$genre,  	  PDO::PARAM_STR);
+			$pbe->bindValue(":age", 	 	$age,   	  PDO::PARAM_INT);
+			$pbe->bindValue(":picture",    	$picture,     PDO::PARAM_STR);
+			$pbe->bindValue(":price", 		$price,    	  PDO::PARAM_STR);
+			$pbe->bindValue(":type", 		$type, 		  PDO::PARAM_STR);
+			$pbe->bindValue(":state", 		$state, 	  PDO::PARAM_STR);
+		}
+		
+		if ($addRemoveorEdit != "add") {
+			$pbe->bindValue(":movieId", $movieId, PDO::PARAM_INT);
+		}
+		
 		$check = $pbe->execute();
 		
 		return $check;

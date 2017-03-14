@@ -19,8 +19,3 @@ session_destroy();
 // Refresh to Homepage
 RedirectToPage();
 ?>
-
-
-
-
-

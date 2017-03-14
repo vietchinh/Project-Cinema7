@@ -1,8 +1,7 @@
-<!-- 
-	Opdracht PM11 STAP 1 : Film Toevoegen 
-	Maak hier het formulier waarmee je een film kan toevoegen aan de database. Let op: dit formulier komt dus overeen met de velden uit de database tabel Films
--->
 <?php
+
+// Section 1 - Add movie (PM11);
+
 $allFilms = fetchDatabase($pdo, "allMovie");
 // Source: https://gist.github.com/alexwright/1853977
 
@@ -26,13 +25,11 @@ $enumStatus = fetchDatabase($pdo, "enum", "Status");
 				color: red;
 			}
 		</style>
-<form action="" method="POST" id="new">
+<form method="POST" id="new">
 	<h3>Nieuw Film</h3>
 	<input type="text" name="title" placeholder="Titel" value="" required/>
 		<br />
 	<input type="number" min="0" max="999" name="duration" placeholder="Duur" value="" required/> <?php echo $durErr ?>
-		<br />
-	<input type="text" name="genre" placeholder="Genre" value="" required/>
 		<br />
 	<input type="number" min="0" max="999" step="any" name="price" placeholder="Prijs" value="" required/> <?php echo $priceErr ?> <!-- Step='Any' is from https://www.isotoma.com/blog/2012/03/02/html5-input-typenumber-and-decimalsfloats-in-chrome/ -->
 		<br />
@@ -80,19 +77,18 @@ $enumStatus = fetchDatabase($pdo, "enum", "Status");
 
 
 <?php
-$types  = array("Normaal", "3D", "IMAX", "IMAX 3D");
-$states = array("InBios", "Verwacht");
+// Section 2 - Change movie (PM12);
+
 	foreach ($allFilms as $key){
 		echo "
-		<form action='' method='POST' id='change'>
+		<form method='POST' id='change'>
 			<h3>$key->Titel</h3>
-			<input type='text' name='title' placeholder='$key->Titel' required/>
+			<input type='hidden' name='movieId' value='$key->FilmID'>
+			<input type='text' name='title' placeholder='$key->Titel' value='$key->Titel' required/>
 				<br />
-			<input type='number' min='0' max='999'  name='duration' placeholder='$key->Duur' required/>
+			<input type='number' min='0' max='999' placeholder='$key->Duur' name='duration' value='$key->Duur' required/> $durErr
 				<br />
-			<input type='number' min='1' max='100' name='age' placeholder='$key->Leeftijd' required/>
-				<br />
-			<input type='number' min='0' max='999'name='price' placeholder='$key->Prijs' required/>
+			<input type='number' min='0' max='999' step='0.01' placeholder='$key->Prijs' name='price' value='$key->Prijs' required/> $priceErr
 				<br />
 			<select name='age' required>";
 				foreach(explode(",", substr($enumAge->enum, 0, (strlen($enumAge->enum) - 1))) as $value)
@@ -139,9 +135,10 @@ $states = array("InBios", "Verwacht");
 				}
 		echo "</select>
 				<br />
-			<textarea type='text' name='description' placeholder='$key->Beschrijving' cols='110' rows='10' required>$key->Beschrijving</textarea>
+			<textarea type='text' name='description' cols='110' rows='10' required>$key->Beschrijving</textarea>
 				<br />
-			<input type='submit' name='wijzigingen' value='Wijzig Film' />
+			<input type='submit' name='changeMovie' value='Wijzig Film' />
+			<input type='submit' name='deleteMovie' value='Verwijder Film' />
 		</form>";
 	}
 ?>

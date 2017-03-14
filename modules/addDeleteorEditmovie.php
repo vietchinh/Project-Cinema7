@@ -1,24 +1,20 @@
 <?php
-// beveiliging pagina voor niet geautoriseerde bezoekers
-if(LoginCheck($pdo))
-{
-	// user is ingelogd
-	if($_SESSION['level'] >= 5) //pagina alleen zichtbaar voor level 5 of hoger
-	{
-	//-------------code---------------//	
+// Section 1 - Login check
+// Check whether the user is logged in or not.
+if(LoginCheck($pdo)) {
+	
+	// Section 2 - User permission level check.
+	// This page is only visible to user that has level 5 or higher.
+	if($_SESSION['level'] >= 5) {
 		
 		//init fields
 		$title = $description = $duration = $genre = $age = $picture = $price = $type = $status = NULL;
 
 		//init error fields
-		$ageErr = $durErr = $priceErr = NULL;
-
-		/* 
-		Opdracht PM11 STAP 2 : Film Toevoegen 
-		Maak een if statement waarmee je controleert of het formulier is ingevoerd. Zo ja, dan gaan we verder met het valideren van de gegevens en het toevoegen ervan aan de database, Zo nee, Dan wordt het formulier getoond.
-		*/
-			
-		if (isset($_POST["newMovie"])){
+		$durErr = $priceErr = NULL;
+		
+		//
+		if (isset($_POST["newMovie"]) || isset($_POST["changeMovie"])){
 
 			
 			/* 
@@ -38,7 +34,6 @@ if(LoginCheck($pdo))
 			$status 	 = $_POST["state"];
 	
 			$checkOnerrors = array (
-				"ageErr" => ctype_digit($age),
 				"durErr" => ctype_digit($duration),
 				"priceErr" => is_numeric($price)
 			);
@@ -47,8 +42,6 @@ if(LoginCheck($pdo))
 
 				// Error response array
 				$errorResponse = array(
-
-					"ageErr" 	=> "U moet hier ALLEEN nummers schrijven zonder komma's.",	
 
 					"durErr" 	=> "U moet hier ALLEEN nummers schrijven zonder komma's.",
 
@@ -62,38 +55,42 @@ if(LoginCheck($pdo))
 				foreach ($errorResponse as $key => $value) {
 					${$key} = $value; // source  http://stackoverflow.com/questions/9257505/dynamic-variable-names-in-php
 				}
-
-				require_once("./forms/addMovieform.php");
-
 			}
 			else {
-			}
-				$ifSuccess = addNewmovie($pdo, $title, $description, (int)$duration, $genre, (int)$age, $picture, (float)$price, $type, $status);
-
-				if ($ifSuccess) {
-					echo "De film is toegevoegd aan de database";
+				if ( isset($_POST["changeMovie"])){
+					$movieId = $_POST["movieId"];
+					$ifSuccess = add_Remove_or_Edit_movies($pdo, "edit", $movieId, $title, $description, (int)$duration, $genre, (int)$age, $picture, (float)$price, $type, $status);
+					$responseMessage = "De film is aangepast.";
 				}
 				else {
-					echo "Er is iets misgegaan met het toevoegen van de film in de database.";
+					$ifSuccess = add_Remove_or_Edit_movies($pdo, "add", null, $title, $description, (int)$duration, $genre, (int)$age, $picture, (float)$price, $type, $status);
+					$responseMessage = "De film is toegevoegd aan de database.";
 				}
-				require_once("./forms/addMovieform.php");
-}
-		else {
-			require_once("./forms/addMovieform.php");
+			}
+		}
+		elseif (isset($_POST["deleteMovie"])) {
+			$movieId = $_POST["movieId"];
+			$ifSuccess = add_Remove_or_Edit_movies($pdo, "remove", $movieId);
+			$responseMessage = "De film is verwijderd.";
 		}
 		
-	//-------------code--------------//
-
+		if ($ifSuccess) {
+			echo $responseMessage;
+		}
+		else {
+			echo "Er is iets misgegaan met het toevoegen van de film in de database.";
+		}
+		
+		require_once("./forms/addMovieform.php");
+		
 	}
-	else
-	{
+	else{
 		//user heeft niet het correcte level
 		echo 'U heeft niet de juiste bevoegdheid voor deze pagina.';
 		RedirectNaarPagina(5);//redirect naar home
 	}
 }
-else
-{
+else {
 	//user is niet ingelogd
 	RedirectNaarPagina(NULL,98);//instant redirect naar inlogpagina
 }

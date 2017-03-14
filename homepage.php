@@ -58,7 +58,7 @@
 					require_once("./modules/Besteloverzicht.php");
 					break;				
 				case 8:
-					require_once("./modules/addMovie.php");
+					require_once("./modules/addDeleteorEditmovie.php");
 					break;				
 				case 9:
 					require_once("./modules/FilmAanpassenVerwijderen.php");

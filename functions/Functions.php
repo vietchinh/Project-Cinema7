@@ -31,7 +31,6 @@ function login($pdo, $username, $password) {
 	*/
 
 	if ($userData) {
-		// Variabelen inlezen uit query
 
 		if (password_verify($password, $userData->Paswoord)) {
 
@@ -146,7 +145,7 @@ function LoginCheck($pdo) {
   */
   function is_Username_Unique($input, $pdo)
   {
-	$userData = fetchDatabase($pdo, "login", $input, "Inlognaam");
+	$userData = fetchDatabase($pdo, "login", $input);
 	
 	// controleren of de username voorkomt in de DB
 	if ($userData || $input == "admin") 
