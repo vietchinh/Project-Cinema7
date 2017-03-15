@@ -8,7 +8,7 @@ if(LoginCheck($pdo)) {
 	if($_SESSION['level'] >= 5) {
 		
 		//init fields
-		$title = $description = $duration = $genre = $age = $picture = $price = $type = $status = NULL;
+		$title = $description = $duration = $genre = $age = $picture = $price = $type = $status = $ifSuccess = NULL;
 
 		//init error fields
 		$durErr = $priceErr = NULL;
@@ -74,11 +74,13 @@ if(LoginCheck($pdo)) {
 			$responseMessage = "De film is verwijderd.";
 		}
 		
-		if ($ifSuccess) {
-			echo $responseMessage;
-		}
-		else {
-			echo "Er is iets misgegaan met het toevoegen van de film in de database.";
+		if (isset($_POST["newMovie"]) || isset($_POST["changeMovie"]) || isset($_POST["deleteMovie"])){
+			if ($ifSuccess) {
+				echo $responseMessage;
+			}
+			else {
+				echo "Er is iets misgegaan met het toevoegen van de film in de database.";
+			}
 		}
 		
 		require_once("./forms/addMovieform.php");

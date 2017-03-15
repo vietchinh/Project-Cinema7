@@ -366,6 +366,19 @@ function ConnectDB() {
 		
 		$check = $pbe->execute();
 		
+		
+		if ($addRemoveorEdit == "remove") {
+			
+			$sql = " OPTIMIZE TABLE cinema7.films";
+			$pbe = $pdo->prepare($sql);
+			$pbe->execute();			
+			
+			
+			$sql = " ALTER TABLE cinema7.films AUTO_INCREMENT = 1";
+			
+			$pbe = $pdo->prepare($sql);
+			$pbe->execute();
+		}
 		return $check;
 	}
 ?>
