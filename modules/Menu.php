@@ -11,7 +11,13 @@ $MenuInUitloggen = (!$isLogin) ? "Login" : "Uitloggen" ; // default menuknop inl
 echo "<ul id='menu'>";
 
 foreach(fetchDatabase($pdo, "menu", $level, PDO::PARAM_INT) as $key) {
-	echo "<li><a href='index.php?pageNr={$key->PaginaNr}'>{$key->Tekst}</a></li>";
+	if (isset($_SESSION['level']) && $_SESSION['level'] >= 1 && $key->PaginaNr == 2) {
+		$text = "Film Reserveren";
+	}
+	else {
+		$text = $key->Tekst;
+	}
+	echo "<li><a href='index.php?pageNr={$key->PaginaNr}'>{$text}</a></li>";
 }
 echo "<li><a href='index.php?pageNr=5'>" . $MenuInUitloggen . "</a></li></ul>";
 

@@ -160,15 +160,19 @@ function LoginCheck($pdo) {
 	}
 
 	// Functie die de object uit de fetchDatabase omzet in een tabel voor de tabel films
-	function returnTablestatus($fs, $form = false){ // fs = fetchStatus
+	function returnTablestatus($fs, $form = false, $available = false){ // fs = fetchStatus
 		$table = null;
 		foreach ($fs as $object){
 			if ($form) {
 				$form = "
-					<form method='post' action='./Modules/Data.Tijden.php'>
-						<input type='hidden' name='filmID' value='$object->FilmID'>
-						<input type='submit' name='reserveren' value='Reserveren'>
+					<form method='post'>
+						<input type='hidden' name='filmTitle' value='$object->Titel'>
+						<input type='hidden' name='filmId' value='$object->FilmID'>
+						<input type='submit' name='reserve' value='Reserveren'>
 					</form>";
+			}
+			elseif ($available) {
+				$form = "Registeer nu om films te kunnen reserveren! Als je al een account hebt dan log nu in!";
 			}
 			$table .= "
 				<div id='main'>

@@ -11,20 +11,6 @@ $enumType 	= fetchDatabase($pdo, "enum", "Type");
 $enumStatus = fetchDatabase($pdo, "enum", "Status");
 
 ?>
-		<style>
-			form {
-				border: 1px solid orange;
-				border-radius: 5px;
-				padding: 5px;
-				margin: 5px;
-			}
-			.nieuwe {
-				background: orange;
-			}
-			.rood {
-				color: red;
-			}
-		</style>
 <form method="POST" id="new">
 	<h3>Nieuw Film</h3>
 	<input type="text" name="title" placeholder="Titel" value="" required/>

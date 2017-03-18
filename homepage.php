@@ -20,7 +20,6 @@
 	<div id="Banner"></div>
 	<main>
 		<?php
-			
 			// Section 1 - Modular Page Buttons
 			
 			$pageNr = (isset($_GET["pageNr"])) ? $_GET["pageNr"] : 1;
@@ -30,13 +29,13 @@
 					require_once("./modules/home.php");
 					break;
 				case 2:
-					require_once("./modules/reserveMovie.php");
+					(isset($_POST["reserve"]) || isset($_POST["submitReserve"]) ) ? require_once("./modules/reserveMovies.php") : require_once("./modules/availableMovies.php");
 					break;
 				case 3:
 					require_once("./modules/expectedMovie.php");
 					break;
 				case 4:
-					require_once("./modules/OverOns.php");
+					require_once("./modules/aboutUs.php");
 					break;
 				case 5:
 				// registerLf = Register loginForm; It's the register button on the login page. registerRf = Register registerForm It's the register button on the register page.
@@ -55,13 +54,13 @@
 					require_once("./modules/myprofile.php");
 					break;
 				case 7:
-					require_once("./modules/Besteloverzicht.php");
+					require_once("./modules/orderlist.php");
 					break;				
 				case 8:
 					require_once("./modules/addDeleteorEditmovie.php");
 					break;				
 				case 9:
-					require_once("./modules/FilmAanpassenVerwijderen.php");
+					require_once("./modules/orderProcess.php");
 					break;
 			}
 		?>

@@ -33,11 +33,11 @@ function ConnectDB() {
 	// http://stackoverflow.com/questions/2350052/how-can-i-get-enum-possible-values-in-a-mysql-database
 	// http://stackoverflow.com/questions/614238/how-can-i-rename-a-single-column-in-a-table-at-select
 	
-	// section 2.1 - Select	
-		$sql = "
-			select";
+	// section 2.1 - Select
+		$sql = null;
 		if ($select == "movie" || $select == "allMovie") {
 			$sql .= "
+			SELECT
 				cinema7.films.Titel,
 				cinema7.films.Plaatje,
 				cinema7.films.Beschrijving,
@@ -52,11 +52,13 @@ function ConnectDB() {
 		}
 		elseif ($select == "menu") {
 			$sql .= "
+			SELECT
 				*
 			";
 		}
 		elseif ($select == "login"){
 			$sql .= "
+			SELECT
 				cinema7.klanten.KlantID,
 				cinema7.klanten.Inlognaam,
 				cinema7.klanten.Paswoord,
@@ -64,6 +66,7 @@ function ConnectDB() {
 		}
 		elseif ($select == "customerData") {
 			$sql .= "
+			SELECT
 				cinema7.klanten.Voornaam,
 				cinema7.klanten.Achternaam,
 				cinema7.klanten.Adres,
@@ -75,33 +78,58 @@ function ConnectDB() {
 		}
 		elseif ($select == "enum") {
 			$sql .= "
+			SELECT
 				substring(COLUMN_TYPE,7)
 				AS
 				enum
 			";
 		}
+		elseif ($select == "hallId"){
+			$sql .= "
+			SELECT DISTINCT
+				cinema7.vertoningen.ZaalNR";
+		}
+		elseif ($select == "reserve") {
+			$sql .= "
+			SELECT
+				cinema7.films.Titel,
+				cinema7.films.Prijs,
+				cinema7.films.Plaatje,
+				cinema7.vertoningen.ZaalNR,
+				cinema7.vertoningen.Datum,
+				cinema7.vertoningen.Tijd,
+				cinema7.vertoningen.VertoningsID
+			";
+		}
 	// Section 2.2 - from
-		$sql .= "
-			from
-		";
 		if ($select == "movie" || $select == "allMovie") {
 			$sql .= "
+			FROM
 				cinema7.films
 			";
 		}
 		elseif ($select == "menu") {
 			$sql .= "
+			FROM
 				cinema7.menu
 			";
 		}
 		elseif ($select == "login" || $select == "customerData") {
 			$sql .= "
+			FROM
 				cinema7.klanten	
 			";
 		}
 		elseif ($select == "enum") {
 			$sql .= "
+			FROM
 				INFORMATION_SCHEMA.COLUMNS
+			";
+		}
+		elseif ($select == "reserve" || $select == "hallId") {
+			$sql .= "
+			FROM
+				cinema7.vertoningen
 			";
 		}
 	// Section 2.3 - Where or any other valid syntax
@@ -143,6 +171,26 @@ function ConnectDB() {
 					COLUMN_NAME = :columnName
 			";
 		}
+		elseif ($select == "hallId") {
+			$sql .= "
+				WHERE
+					cinema7.vertoningen.FilmID = :movieId
+				ORDER BY
+					cinema7.vertoningen.ZaalNR
+			";
+		}
+		elseif ($select == "reserve") {
+			$sql .= "
+				LEFT OUTER JOIN
+					cinema7.films
+				ON
+					cinema7.vertoningen.FilmID = cinema7.films.FilmID
+				WHERE
+					cinema7.vertoningen.FilmID = :movieId
+				ORDER BY
+					cinema7.vertoningen.ZaalNR AND cinema7.vertoningen.Tijd
+			";
+		}
 		
 	// Section 2.4 - Prepare Bind Execute Return
 		// Section 2.4.1 - Prepare
@@ -161,6 +209,9 @@ function ConnectDB() {
 		elseif ($select == "enum") {
 			$pbe->bindValue(":columnName", $bindValue, $param);
 		}
+		elseif($select == "reserve" || $select == "hallId") {
+			$pbe->bindValue(":movieId", $bindValue, $param);
+		}
 
 		// Section 2.4.3 - Execute
 		$pbe->execute();
@@ -171,6 +222,9 @@ function ConnectDB() {
 		}
 		elseif ($select == "customerData"){
 			return $pbe->fetch(PDO::FETCH_ASSOC);
+		}
+		elseif ($select == "reserve") {
+			return $pbe->fetchAll(PDO::FETCH_ASSOC);
 		}
 		else {
 			return $pbe->fetchAll(PDO::FETCH_OBJ);
@@ -381,4 +435,57 @@ function ConnectDB() {
 		}
 		return $check;
 	}
+function addReservation($pdo, $clientId) {
+		
+		$sql = "
+			INSERT INTO
+			cinema7.reserveringen
+			(
+				KlantID
+			)
+			VALUES
+			(
+				:clientId
+			)";
+		
+		$pbe = $pdo->prepare($sql);
+		$pbe->bindValue(":clientId",  $clientId,  PDO::PARAM_INT);
+		$pbe->execute();
+		
+		$sql = "
+			SELECT
+				cinema7.reserveringen.ReserveringsID
+			FROM
+				cinema7.reserveringen
+			WHERE
+				cinema7.reserveringen.KlantID = :clientId
+				";
+		$pbe = $pdo->prepare($sql);		
+		$pbe->bindValue(":clientId",  $clientId,  PDO::PARAM_INT);
+		$pbe->execute();
+		return $pbe->fetchAll(PDO::FETCH_OBJ);
+}
+function addReservationshowId($pdo, $reservationId, $showId, $tickets) {
+		
+		$sql = "
+			INSERT INTO
+			cinema7.reserveringen_vertoningen
+			(
+				ReserveringsID,
+				VertoningsID,
+				AantalKaartjes
+			)
+			VALUES
+			(
+				:reservationId,
+				:showId,
+				:tickets
+			)";
+		
+		$pbe = $pdo->prepare($sql);
+		$pbe->bindValue(":reservationId",  $reservationId, PDO::PARAM_INT);
+		$pbe->bindValue(":showId", 		   $showId, 	   PDO::PARAM_INT);
+		$pbe->bindValue(":tickets",  	   $tickets,  	   PDO::PARAM_INT);
+		return $pbe->execute();
+}
 ?>
