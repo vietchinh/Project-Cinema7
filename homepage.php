@@ -20,12 +20,12 @@
 	<div id="Banner"></div>
 	<main>
 		<?php
-			//$module = $_SESSION["module"];
+			$module = $_SESSION["module"];
 			echo "<pre>";
 			print_r($_POST);
 			print_r($_SESSION);
 			echo "</pre>";
-			require_once($_SESSION["module"]);
+			require_once($module);
 		?>
 	</main>
 </div>
