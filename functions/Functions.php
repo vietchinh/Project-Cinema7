@@ -168,7 +168,7 @@ function LoginCheck($pdo) {
 					<form method='post'>
 						<input type='hidden' name='filmTitle' value='$object->Titel'>
 						<input type='hidden' name='filmId' value='$object->FilmID'>
-						<input type='submit' name='reserve' value='Reserveren'>
+						<input type='submit' name='pageName[Reserveren]' value='Reserveren'>
 					</form>";
 			}
 			elseif ($available) {
