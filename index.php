@@ -14,9 +14,12 @@ $level = (!$isLogin) ? 0 : $_SESSION["level"]; // Set level for /modules/menu.ph
 
 $MenuInUitloggen = (!$isLogin) ? "Login" : "Uitloggen" ; //Set menu button for /modules/menu.php
 
-// Section 3 - Page Selection using POST PageName into a session.
+// Section 3 - Page Selection using POST PageName and session module.
+//		Date Creation: 19-03-2017, Date Modification: 19-03-2017	
+// If post pageName or module is set then it will check basing off the post pageName key to the user selected page.
+// After it found it's value, like: $pageName is the same as Home. It will set local variable called module to the module like home.php from the previous example in the module folder. Module-ception.
+// After that it will put local variable module into the session called module.
 if (isset($_POST["pageName"]) && isset($_SESSION["module"])){
-	if (array_key_exists(key($_POST["pageName"]), $_POST["pageName"])){
 
 		$pageName = key($_POST["pageName"]);
 
@@ -60,8 +63,7 @@ if (isset($_POST["pageName"]) && isset($_SESSION["module"])){
 				}
 			}
 		}
-		$_SESSION["module"] = $module;
-	}	
+		$_SESSION["module"] = $module;	
 }
 elseif (!isset($_SESSION["module"])) {
 	$_SESSION["module"] = "./modules/home.php";	
