@@ -1,3 +1,6 @@
+<!-- Section 1 - my Profile Form -->
+<!-- Date Creation: 18-03-2017 | Date Modifcation: 24-03-2017 -->
+<!-- Create a dynamic form. Placeholder and the error message are dynamicly set with php. -->
 
 	<h1>Gegevens Wijzigen</h1>
 	<form name="WijzigenFormulier" action="" method="post">
@@ -22,5 +25,5 @@
 		<label for="Email">E-mail:</label>
 		<input type="text" id="Email" name="Email" placeholder="<?php echo $Email; ?>" /><?php echo $MailErr; ?> <!-- Het laat zien het email van een klant, maar als het email niet voldoet aan de voorwaardes, dan geeft die naast het email een error. -->
 		<br />	
-		<input type="submit" name="Wijzigen" value="Uw gegevens wijzigen" />
+		<input type="submit" name="changeProfile" value="Uw gegevens wijzigen" />
 	</form>

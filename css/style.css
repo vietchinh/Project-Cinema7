@@ -1,64 +1,53 @@
-/* Section 1 - Global Setting */
+/* Section 1 - Global Settings */
+/* Date Creation: 18-03-2017 | Date Modification: 24-03-2017 */
 
-*{
+	/* Section 1.1 - Default font size, style, variant, weight and height.*/
+	/* Date Creation: 18-03-2017 | Date Modification: 18-03-2017 */
+	/* Source: http://www.cssfontstack.com/helvetica */
+
+	h1, h3, p, pre, blockqoute {
+		font-size: 14px;
+		font-style: normal;
+		font-variant: normal;
+		font-weight: 400;
+	}
+
+	h1 {
+
+		font-size: 24px;
+		font-style: normal;
+		font-variant: normal;
+		font-weight: 500;
+		line-height: 26.4px;
+	}
+	h3 {
+		font-weight: 500;
+		line-height: 15.4px;
+	}
+	p {
+		line-height: 20px;
+	}
+	blockquote {
+		font-size: 21px;
+		line-height: 30px;
+	}
+	pre {
+		font-size: 13px;
+		line-height: 18.5714px;
+	}
+	/* End Section 1.1 */
+* {
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	margin:0px;
 	padding:0px;
 }
-/* Section 2 - Default font size, style, variant, weight and height.*/
-/* Source: http://www.cssfontstack.com/helvetica */
-
-h1, h3, p, pre, blockqoute {
-	font-size: 14px;
-	font-style: normal;
-	font-variant: normal;
-	font-weight: 400;
-}
-
-h1 {
-
-	font-size: 24px;
-	font-style: normal;
-	font-variant: normal;
-	font-weight: 500;
-	line-height: 26.4px;
-}
-h3 {
-	font-weight: 500;
-	line-height: 15.4px;
-}
-p {
-	line-height: 20px;
-}
-blockquote {
-	font-size: 21px;
-	line-height: 30px;
-}
-pre {
-	font-size: 13px;
-	line-height: 18.5714px;
-}
-
-
-
-#new, #change{
-	border: 1px solid orange;
-	border-radius: 5px;
-	padding: 5px;
-	margin: 5px;
-}
-#new {
-	background: orange;
-}
-
-body
-{
+body {
 	background-image:url("../.././Project-Cinema7-img/background.jpg");
 	background-repeat: no-repeat;
 	background-size:cover;
 }
 
-header{
+header {
 	width:1000px;
 	height:75px;
 	background-color:white;
@@ -66,14 +55,54 @@ header{
 	margin-right:auto;
 }
 
+nav {
+	width: 1000px;
+	height: 36px;
+	Background-color: black;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+main
+{
+	width: 960px;
+	min-height:360px;
+	padding:20px;
+	Background-color: white;
+	margin-bottom:10px;
+}
+
 .inheritHw {
 	height: inherit;
 	width: inherit;
 }
-#new input, #change input {
-width: 169px;
+
+.displayIflex {
+	display: inline-flex;
 }
 
+.flexFlowr {
+	flex-flow: column wrap;
+}
+
+.flexFlowc {
+    flex-flow: row wrap;
+}
+
+.justifyContentsb{
+	justify-content: space-between;
+}
+
+.justifyContentsa {
+	justify-content: space-around;
+}
+
+.justifyContentc{
+	justify-content: center;
+}
+
+/* Section 2 - homepage.php */
+/* Date Creation: 18-03-2017 | Date Modification: 18-03-2017 */
 #Logo
 {
 	display:block;
@@ -105,88 +134,9 @@ width: 169px;
 
 }
 
-nav
-{
-	width: 1000px;
-	height: 36px;
-	Background-color: black;
-	margin-left:auto;
-	margin-right:auto;
-}
+/* Section 3 - menu.php */
+/* Date Creation: 18-03-2017 | Date Modification: 24-03-2017 */
 
-main
-{
-	width: 960px;
-	min-height:360px;
-	padding:20px;
-	Background-color: white;
-	margin-bottom:10px;
-}
-
-/* Menu Styles */
-
-#menu
-{
-	padding:0px;
-}
-
-#menu li
-{
-	display:inline;
-}
-
-#menu li a
-{
-	font-family:Arial;
-	font-size:12px;
-	font-weight:bold;
-	text-decoration: none;
-	float:left;
-	padding:10px;
-	background-color: #000000;
-	color:#ffffff;
-	border-bottom:1px;
-	border-bottom-color:#000000;
-	border-bottom-style:solid;
-}
-
-#menu li a:hover
-{
-	background-color:#993300;
-	padding-bottom:15px;
-	border-bottom:2px;
-	border-bottom-color:#750C0D;
-	border-bottom-style:solid;
-	margin:0px;
-}
-#orderContent {
-	margin-left: 10px;
-}
-/* Reseveren / Verwacht Styles */
-.displayIflex {
-	display: inline-flex;
-}
-.flexFlowr {
-	flex-flow: column wrap;
-}
-.justifyContentsb{
-	justify-content: space-between;
-}
-.justifyContentsa {
-	justify-content: space-around;
-}
-.justifyContentc{
-	justify-content: center;
-}
-#main {
-	margin-bottom: 50px;
-	text-align: center;
-}
-#infoBar h4 {
-	margin-left: 10px;
-}
-
-/* navigationbarForm */
 #navigationbarForm input {
 	text-align: center;
 	background: none;
@@ -196,3 +146,36 @@ main
 	outline: none;
 	cursor: pointer;
 }
+
+/* Section 4 - addDeleteorEditmovie.php */
+/* Date Creation: 18-03-2017 | Date Modification: 24-03-2017 */
+#new, #change{
+	border: 1px solid orange;
+	border-radius: 5px;
+	padding: 5px;
+	margin: 5px;
+}
+#new {
+	background: orange;
+}
+
+#new input, #change input {
+width: 169px;
+}
+
+/* Section 5 - orderList.php */
+/* Date Creation: 18-03-2017 | Date Modification: 18-03-2017 */
+#orderContent {
+	margin-left: 10px;
+}
+
+/* Section 6 - availableMovies.php / expectedMovie.php */
+/* Date Creation: 18-03-2017 | Date Modification: 24-03-2017 */
+#main {
+	margin-bottom: 50px;
+	text-align: center;
+}
+#infoBar h4 {
+	margin-left: 10px;
+}
+

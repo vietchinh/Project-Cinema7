@@ -1,13 +1,15 @@
 <?php
+// Section 1 - Intialize data from database and post
+// Date Creation: 18-03-2017 | Date Modification: 23-03-2017
+$movieId 			   			   = $_POST["filmId"];
+$_SESSION["availableReservations"] = readShowdata($pdo, $movieId);
 
-	unset($_SESSION["order"]);
-
-	$filmId 			   			   = $_POST["filmId"];
-	$_SESSION["availableReservations"] = fetchDatabase($pdo, "reserve", $filmId, PDO::PARAM_INT);
-
-	$availableReservations			   = $_SESSION["availableReservations"];
-	$hallId 			   			   = fetchDatabase($pdo, "hallId", $filmId, PDO::PARAM_INT);
+$availableReservations			   = $_SESSION["availableReservations"];
+$hallId 			   			   = readShowhallId($pdo, $movieId);
 ?>
+<!-- Section 2 - Reservation Form -->
+<!-- Date Creation: 18-03-2017 | Date Modification: 23-03-2017 -->
+<!-- Create form with dynamic radio with the data from database and amount of tickets using for loop -->
 <form method="POST" id="reserveRadio">
 	<h1><?php echo $availableReservations[0]["Titel"] ?></h1>
 	<h4><?php echo $availableReservations[0]["Prijs"] ?></h4>

@@ -1,10 +1,10 @@
 <!-- Section 1 - Create menu buttons from the database. -->
-<!-- 			Date Creation: 18-3-2017 				-->
+<!-- Date Creation: 18-3-2017 | Date Modification: 18-03-2017 -->
 <!-- It fetch from the table menu in the database Cinema7. The fetch is an object and iterate the menu using foreach.-->
-<!-- Fun Fact Section: The menu worked by using GET instead of POST -->
+<!-- Fun Fact Section: The menu used to work by using GET -->
 <form method="POST" id="navigationbarForm" class="displayIflex inheritHw justifyContentsa">
 	<?php
-		foreach(fetchDatabase($pdo, "menu", $level, PDO::PARAM_INT) as $key) {
+		foreach(readMenudata($pdo, $level) as $key) {
 			if (isset($_SESSION["level"]) && $key->PaginaNr == 2) {
 				$text = "Film Reserveren";
 			}

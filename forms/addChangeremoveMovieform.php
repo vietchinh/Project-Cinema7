@@ -1,16 +1,21 @@
 <?php
 
-// Section 1 - Add movie (PM11);
+// Section 1 - Get data from database (Assignment: Add movie (PM11) );
+// Date Creation: 18-03-2017 | Date Modifcation: 20-03-2017
+// Basicly getting data for all the movies and enum table
 
-$allFilms = fetchDatabase($pdo, "allMovie");
+$allFilms = readMovies($pdo);
 // Source: https://gist.github.com/alexwright/1853977
 
-$enumAge 	= fetchDatabase($pdo, "enum", "Leeftijd");
-$enumGenre  = fetchDatabase($pdo, "enum", "Genre");
-$enumType 	= fetchDatabase($pdo, "enum", "Type");
-$enumStatus = fetchDatabase($pdo, "enum", "Status");
+$enumAge 	= readEmovies($pdo, "Leeftijd");
+$enumGenre  = readEmovies($pdo, "Genre");
+$enumType 	= readEmovies($pdo, "Type");
+$enumStatus = readEmovies($pdo, "Status");
 
 ?>
+<!-- Section 2 - Create form for adding movies -->
+<!-- Date Creation: 18-03-2017 | Date Modifcation: 20-03-2017 -->
+<!-- Create a form for admins / page owner to add movies. -->
 <form method="POST" id="new">
 	<h3>Nieuw Film</h3>
 	<input type="text" name="title" placeholder="Titel" value="" required/>
@@ -61,9 +66,11 @@ $enumStatus = fetchDatabase($pdo, "enum", "Status");
 	<input type="submit" name="newMovie" value="Nieuw Film" />
 </form>
 
-
 <?php
-// Section 2 - Change movie (PM12);
+// Section 3 - Change / delete movie form (Assignment: Change / Delete movie (PM12 / PM13) )
+// Date Creation: 18-03-2017 | Date Modifcation: 20-03-2017
+// Using the data from the database and a foreach. Each movie will get it's own form.
+// By doing so the admins / page owner can change or delete each movie.
 
 	foreach ($allFilms as $key){
 		echo "

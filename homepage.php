@@ -20,11 +20,8 @@
 	<div id="Banner"></div>
 	<main>
 		<?php
+			// Refer to index.php to get more info on $_SESSION["module"];
 			$module = $_SESSION["module"];
-			echo "<pre>";
-			print_r($_POST);
-			print_r($_SESSION);
-			echo "</pre>";
 			require_once($module);
 		?>
 	</main>

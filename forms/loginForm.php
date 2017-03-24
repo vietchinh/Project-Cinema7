@@ -1,4 +1,5 @@
-
+<!-- Section 1 - Login Form -->
+<!-- Date Creation: 18-03-2017 | Date Modifcation: 18-03-2017 -->
 <form method="POST" id="Inloggen" >
 	<input type="text" name="username" placeholder="Gebruikersnaam">
 	<input type="password" name="password" placeholder="Password" autocomplete="new-password">
