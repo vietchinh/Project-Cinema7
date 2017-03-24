@@ -1,19 +1,11 @@
 <?php
-if(isset($_POST["deleteOrder"])){
-	$username = $_SESSION["username"];
-	unset($_SESSION["order"][$username]);
-}
-/*
-	Opdracht PM05 STAP 1: Reserveren
-	Omschrijving: Voer een query uit middels een prepared statement
-*/
+// Section 1 - Fetch movies that are currently airing in the cinema
+// Date Creation: 18-03-2017 | Date Modifcation: 20-03-2017
 
-	$fi = fetchDatabase($pdo, "movie", "InBios");
+	$fi = readMovies($pdo, true, "InBios"); // fi = Fetch InBios
 
 
-/*
-	Opdracht PM05 STAP 2: Reserveren
-	Omschrijving: Zorg er voor dat het result van de query netjes op het scherm wordt getoond. Zorg er voor dat er een knopje "reserveren" is waarmee je doorgestuurd wordt naar de reserveren pagina
-*/
+// Section 2 - Show table base on user level.
+// Date Creation: 18-03-2017 | Date Modifcation: 20-03-2017
     echo (isset($_SESSION['level']) && $_SESSION['level'] >= 1) ? returnTablestatus($fi, true) : returnTablestatus($fi, false, true);
 ?>

@@ -1,5 +1,7 @@
 <?php
-// Unset session var 
+// Redirect to home
+redirectTopage();
+// Unset session 
 unset($_SESSION);
  
 // Get session parameters
@@ -15,7 +17,4 @@ setcookie(session_name(),
  
 // Destroy session 
 session_destroy();
-
-// Refresh to Homepage
-RedirectToPage();
 ?>

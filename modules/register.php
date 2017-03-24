@@ -1,59 +1,76 @@
 <?php
-//init fields
-$FirstName = $LastName = $Adres = $ZipCode = $City = $TelNr = $Email = $Username = 	$Password = $RetypePassword = NULL;
+// Section 1 - Initialize variables
+// Date Creation: 18-03-2017 | Date Modifcation: 24-03-2017
+// You may notic the error fields variable has different way of writing. This ONLY applies to error fields. It's for better readability.
+$firstName = $lastName = $adres = $zipcode = $city = $telNr = $email = $username = 	$password = $reTypepassword = $insertCheck = NULL;
 
-//init error fields
-$FnameErr = $LnameErr = $ZipErr = $CityErr = $TelErr = $MailErr = $UserErr = $PassErr = $RePassErr = NULL;
+// Error Fields
+$FnameErr = $LnameErr = $ZipErr = $cityErr = $TelErr = $MailErr = $UserErr = $PassErr = $RePassErr = NULL;
 
-if(isset($_POST["registerRf"])) {	
+// Section 2 - Validate form from ./forms/registerForm.php
+// Date Creation: 18-03-2017 | Date Modifcation: 24-03-2017
+// If the user has pushed the button, then the form goes through validations.
+// The parameters for these validations are: char only, min length, valid dutch postal code, valid dutch telephone number and valid email.
+if(isset($_POST["register"])) {	
 
-	$FirstName 		= $_POST["FirstName"];
-	$LastName 		= $_POST["LastName"];
-	$Adres 			= $_POST["Adres"];
-	$ZipCode 		= $_POST["ZipCode"];
-	$City 			= $_POST["City"];
-	$TelNr 			= $_POST["TelNr"];
-	$Email 			= $_POST["Email"];
-	$Username 		= $_POST["Username"];
-	$Password 		= $_POST["Password"];
-	$RetypePassword = $_POST["RetypePassword"];
+	// Section 2.2 - Initialize data
+	// Date Creation: 18-03-2017 | Date Modifcation: 18-03-2017
+	$firstName 		= $_POST["firstName"];
+	$lastName 		= $_POST["lastName"];
+	$adres 			= $_POST["adres"];
+	$zipcode 		= $_POST["zipcode"];
+	$city 			= $_POST["city"];
+	$telNr 			= $_POST["telNr"];
+	$email 			= $_POST["email"];
+	$username 		= $_POST["username"];
+	$password 		= $_POST["password"];
+	$reTypepassword = $_POST["reTypepassword"];
 	
 	
+	// Section 2.3 - checkOnerrors array + filter on null
+	// Date Creation: 18-03-2017 | Date Modifcation: 24-03-2017
+	// The values of the keys is either true or false (1 or null).
+	// Those values will be filterd. Keys returned, flip those keys and then put that array into his new home named $checkOnnull.
 	$checkOnerrors = array (
-	//controleer het voornaam veld
-	"FnameErrchar" 	 => is_Char_Only($FirstName),
-	"FnameErrlength" => is_minlength($FirstName, 2),
+	// Validate the firstname field
+	"FnameErrchar" 	  => isCharonly($firstName),
+	"FnameErrlength"  => isMinlength($firstName, 2),
 
-	//controleer het achternaam veld
-	"LnameErrchar" 	 => is_Char_Only($LastName),
-	"LnameErrlength" => is_minlength($LastName, 2),
-	
-	//controleer het postcode veld	
-		"ZipErr" 	 => is_NL_PostalCode($ZipCode),	
+	// Validate the lastname field
+	"LnameErrchar" 	  => isCharonly($lastName),
+	"LnameErrlength"  => isMinlength($lastName, 2),
 
-	//controleer het plaats veld
-		"CityErr" 	 => is_Char_Only($City),
+	// Validate the postal code field	
+		"ZipErr" 	  => isNLpostalCode($zipCode),	
 
-	//controleer het telnr veld
-		"TelErr" 	 => is_NL_Telnr($TelNr),
-	
-	//controleer het email veld
-		"MailErr" 	 => is_email($Email),
+	// Validate city field
+		"CityErr" 	  => isCharonly($city),
 
-	//controleer het username veld
-		"UserErr" 	 => is_Username_Unique($Username, $pdo),
+	// Validate telephone field
+		"TelErr" 	  => isNLtelNr($telNr),
+
+	// Validate email field
+		"MailErr" 	  => iseEmail($email),
+
+	// Validate username field
+		"UserErr"     => isUsernameunique($pdo, $username),
 	
-	//controleer het paswoord veld
-		"PassErr" 	 => is_minlength($Password, 6),
+	// Validate password field
+		"PassErr"     => isMinlength($password, 6),
 	
-	//controleer het retype paswoord veld
-	   "RePassErr"   => is_Paswoord_Same($Password, $RetypePassword)
-	
+	// Retype password field
+		"RePassErr"   => isInputsame($password, $repassword)
 	);
 	
-	if(count(array_keys($checkOnerrors, null)) != 0) {
-		$checkOnnull = array_flip(array_keys($checkOnerrors, null));
+	$checkOnnull = array_flip(array_keys($checkOnerrors, null));
+	
+	// Section 2.4 - Error Response
+	// If $checkOnnull is empty or equal to 0 then it will create a new user.
+	// If $checkOnnull is larger than 0 then it's going to create an error response into the variables that you can find above.	
+	if(count($checkOnnull) != 0) {
 		
+		// Section 2.4.1 - Unset not needed variables
+		// Date Creation: 18-03-2017 | Date Modifcation: 18-03-2017		
 		unset
 		( 
 		$checkOnnull["FnameErrchar"], 
@@ -62,7 +79,8 @@ if(isset($_POST["registerRf"])) {
 		$checkOnnull["LnameErrlength"]
 		);
 
-		// Error response array
+		// Section 2.4.2 - Error Response
+		// Date Creation: 18-03-2017 | Date Modifcation: 24-03-2017
 		$errorResponse = array(
 				
 			"ZipErr" 	=> "Uw postcode klopt niet. U moet het volgens het standaard manier schrijven: 1234 AA",	
@@ -73,7 +91,7 @@ if(isset($_POST["registerRf"])) {
 			
 			"MailErr" 	=> "U e-mail address is niet valide",
 
-			"UserErr" 	=> ($Username == "Admin" || $Username == "admin" || $Username == "Root" || $Username == "root") ? "U bent niet de eigenaar van deze website" : "Uw gebruikersnaam is al in gebruik.",
+			"UserErr" 	=> ($username == "Admin" || $username == "admin" || $username == "Root" || $username == "root") ? "U bent niet de eigenaar van deze website" : "Uw gebruikersnaam is al in gebruik.",
 			
 			"PassErr"   => "Uw paswoord moet minimaal 6 karakter lang zijn",
 			
@@ -112,42 +130,29 @@ if(isset($_POST["registerRf"])) {
             }
         }
 		
+		// Section 2.4.3 - Iterate array $errorResponse to variables.
+		// Date Creation: 18-03-2017 | Date Modifcation: 18-03-2017		
 		foreach ($errorResponse as $key => $value) {
 			${$key} = $value; // source  http://stackoverflow.com/questions/9257505/dynamic-variable-names-in-php
 		}
 		
-		require_once("./forms/registerForm.php");
 	}
-	else
-	{
-		//formulier is succesvol gevalideerd
-
-		//hash het paswoord met de Salt
-		$Password = password_hash($Password, PASSWORD_DEFAULT);
-
-		/*
-		Opdracht PM08 STAP 5: registreren
-		Omschrijving: Maak een prepared statement waarmee de gegevens van de gebruiker in de database worden toegevoegd. LET OP: Level moet 1 zijn! 
-		*/
+	else {
+		$password = password_hash($password, PASSWORD_DEFAULT);
 		
-		$insertCheck = insertCustomerdata($pdo, $FirstName, $LastName, $Adres, $ZipCode , $City, $TelNr, $Email, $Username, $Password);
+		// function setup is: createCustomerdata($pdo (required), username (required), first name (required), last name (required), adres (required), zipcode (required), city (required), telephone number (required), email adres (required), password (required) )
+		$insertCheck = createCustomerdata($pdo, $firstName, $lastName, $adres, $zipcode , $city, $telNr, $email, $username, $password);
 		
-		/*
-		Opdracht PM08 STAP 6: registreren
-		Omschrijving: Tot slot geef je de gebruiker de melding dat zijn gegevens zijn toegevoegd.
-		*/
-		
-		if ($insertCheck == true) {
-			echo "U bent succesvol geregistreerd! Van harte welkom! U wordt in 5 seconden herleid naar de home pagina";
-			RedirectToPage(5, 1);
+		// Section 2.5 - Check whether the data is successfully inserted.
+		// Date Creation: 18-03-2017 | Date Modifcation: 24-03-2017	
+		if ($insertCheck) {
+			echo "U bent succesvol geregistreerd! Van harte welkom!";
+			echo redirectTopage(5);
 		}
 		else {
 			echo "Er is iets misgegaan met het registeren. Neem contact op met de pagina beheerder.";
 		}
 	}
 }
-else
-{
-	require_once("./forms/registerForm.php");
-}
+(!$insertCheck) ? require_once("./forms/registerForm.php") : null;
 ?>

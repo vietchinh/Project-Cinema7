@@ -1,99 +1,87 @@
 <?php
-// Section 1 - Login check
-// Check whether the user is logged in or not.
-if(LoginCheck($pdo)) {
-	
-	// Section 2 - User permission level check.
-	// This page is only visible to user that has level 5 or higher.
-	if($_SESSION['level'] >= 5) {
-		
-		//init fields
-		$title = $description = $duration = $genre = $age = $picture = $price = $type = $status = $ifSuccess = NULL;
+// Section 1 - Initialize fields
+// Date Creation: 18-03-2017 | Date Modifcation: 20-03-2017
 
-		//init error fields
-		$durErr = $priceErr = NULL;
-		
-		//
-		if (isset($_POST["newMovie"]) || isset($_POST["changeMovie"])){
+$title = $description = $duration = $genre = $age = $picture = $price = $type = $status = $ifSuccess = NULL;
 
-			
-			/* 
-			Opdracht PM11 STAP 3 : Film Toevoegen 
-			Lees de formulier gegevens in met de POST methode
-			Valideer de ingevoerde gegevens zoals ook gedaan is in de opdrachten registreren en Mijn Profiel.
-			*/
-			
-			$title 		 = $_POST["title"];
-			$description = $_POST["description"];
-			$duration 	 = $_POST["duration"];
-			$genre 		 = $_POST["genre"];
-			$age 		 = $_POST["age"];
-			$picture 	 = "default.jpg";
-			$price 		 = $_POST["price"];
-			$type 		 = $_POST["type"];
-			$status 	 = $_POST["state"];
-	
-			$checkOnerrors = array (
-				"durErr" => ctype_digit($duration),
-				"priceErr" => is_numeric($price)
-			);
+//Error Fields
+$durErr = $priceErr = NULL;
 
-			if(count(array_keys($checkOnerrors, null)) != 0) {
+// Section 2 - Change or add new movie.
+// Date Creation: 18-03-2017 | Date Modifcation: 20-03-2017
+// If the user create or change movie, the field duration is going to be checked on whether the input is not a decimal and the field price is going to be checked on whether it's not a char.
+// These checks is actually just a fail safe, because the user if it's in his best interest to remove the limits and change the type.
+// Given the user sanity, I predict that, what I described above, won't happen.
+// After the validations, it will check whether the user has pushed change movie or create movie.
+// From there it's either update the table "Films" or insert a new row with variables in table "Films"
+if (isset($_POST["newMovie"]) || isset($_POST["changeMovie"])){
 
-				// Error response array
-				$errorResponse = array(
+	$title 		 = $_POST["title"];
+	$description = $_POST["description"];
+	$duration 	 = $_POST["duration"];
+	$genre 		 = $_POST["genre"];
+	$age 		 = $_POST["age"];
+	$picture 	 = "default.jpg";
+	$price 		 = $_POST["price"];
+	$type 		 = $_POST["type"];
+	$status 	 = $_POST["state"];
 
-					"durErr" 	=> "U moet hier ALLEEN nummers schrijven zonder komma's.",
+	$checkOnerrors = array (
+		"durErr" => ctype_digit($duration),
+		"priceErr" => is_numeric($price)
+	);
 
-					"priceErr" 	=> "U moet hier ALLEEN nummers schrijven.",
+	if(count(array_keys($checkOnerrors, null)) != 0) {
 
-				);
+		// Error response array
+		$errorResponse = array(
 
-				$checkOnnull = array_flip(array_keys($checkOnerrors, null));
-				$errorResponse = array_intersect_key($errorResponse, $checkOnnull);
+			"durErr" 	=> "U moet hier ALLEEN nummers schrijven zonder komma's.",
 
-				foreach ($errorResponse as $key => $value) {
-					${$key} = $value; // source  http://stackoverflow.com/questions/9257505/dynamic-variable-names-in-php
-				}
-			}
-			else {
-				if ( isset($_POST["changeMovie"])){
-					$movieId = $_POST["movieId"];
-					$ifSuccess = add_Remove_or_Edit_movies($pdo, "edit", $movieId, $title, $description, (int)$duration, $genre, (int)$age, $picture, (float)$price, $type, $status);
-					$responseMessage = "De film is aangepast.";
-				}
-				else {
-					$ifSuccess = add_Remove_or_Edit_movies($pdo, "add", null, $title, $description, (int)$duration, $genre, (int)$age, $picture, (float)$price, $type, $status);
-					$responseMessage = "De film is toegevoegd aan de database.";
-				}
-			}
+			"priceErr" 	=> "U moet hier ALLEEN nummers schrijven.",
+
+		);
+
+		$checkOnnull = array_flip(array_keys($checkOnerrors, null));
+		$errorResponse = array_intersect_key($errorResponse, $checkOnnull);
+
+		foreach ($errorResponse as $key => $value) {
+			${$key} = $value; // source  http://stackoverflow.com/questions/9257505/dynamic-variable-names-in-php
 		}
-		elseif (isset($_POST["deleteMovie"])) {
+	}
+	else {
+		if ( isset($_POST["changeMovie"])){
 			$movieId = $_POST["movieId"];
-			$ifSuccess = add_Remove_or_Edit_movies($pdo, "remove", $movieId);
-			$responseMessage = "De film is verwijderd.";
+			$ifSuccess = updateMovie($pdo, $movieId, $title, $description, (int)$duration, $genre, (int)$age, $picture, (float)$price, $type, $status);
+			$responseMessage = "De film is aangepast.";
 		}
-		
-		if (isset($_POST["newMovie"]) || isset($_POST["changeMovie"]) || isset($_POST["deleteMovie"])){
-			if ($ifSuccess) {
-				echo $responseMessage;
-			}
-			else {
-				echo "Er is iets misgegaan met het toevoegen van de film in de database.";
-			}
+		else {
+			$ifSuccess = createMovie($pdo, $title, $description, (int)$duration, $genre, (int)$age, $picture, (float)$price, $type, $status);
+			$responseMessage = "De film is toegevoegd aan de database.";
 		}
-		
-		require_once("./forms/addMovieform.php");
-		
-	}
-	else{
-		//user heeft niet het correcte level
-		echo 'U heeft niet de juiste bevoegdheid voor deze pagina.';
-		RedirectNaarPagina(5);//redirect naar home
 	}
 }
-else {
-	//user is niet ingelogd
-	RedirectNaarPagina(NULL,98);//instant redirect naar inlogpagina
+// Section 3 - Delete Movie
+// Date Creation: 18-03-2017 | Date Modifcation: 20-03-2017
+// Delete movie based on movie ID and then set variable $responseMessage.
+elseif (isset($_POST["deleteMovie"])) {
+	$movieId = $_POST["movieId"];
+	$ifSuccess = deleteMovie($pdo, $movieId);
+	$responseMessage = "De film is verwijderd.";
 }
+// Section 4 - Succes or failure response
+// Date Creation: 18-03-2017 | Date Modifcation: 20-03-2017
+// It's a safety net if variable $ifSucces is empty. Which indicate that there is something wrong getting the variables into the database.
+// $ifSuccess is set on each CRUD action.
+if (isset($_POST["newMovie"]) || isset($_POST["changeMovie"]) || isset($_POST["deleteMovie"])){
+	if ($ifSuccess) {
+		echo $responseMessage;
+	}
+	else {
+		echo "Er is iets misgegaan met het toevoegen van de film in de database.";
+	}
+}
+// Section 5 - Insert a fancy form
+// Date Creation: 18-03-2017 | Date Modifcation: 18-03-2017
+require_once("./forms/addChangeremoveMovieform.php");
 ?>
